@@ -1,0 +1,557 @@
+{
+  "__TCA:ExportVersion": "3.22.68.0",
+  "__TCA:ExportedAt": "2026-10-19T06:20:32.3543723Z",
+  "name": "Satisfactory",
+  "shortName": "satisfactory",
+  "description": "",
+  "operatingSystem": "Windows",
+  "backgroundImage": "",
+  "minSlots": 1,
+  "maxSlots": 4,
+  "defaultSlots": 4,
+  "startedUntilResponding": false,
+  "startingTimeout": "00:00:00",
+  "categoryId": 1,
+  "editableExtensions": [
+    ".txt",
+    ".cfg",
+    ".json",
+    ".xml"
+  ],
+  "logExtensions": [
+    ".log"
+  ],
+  "queryRconProtocolConfig": {
+    "queryProtocol": "custom_script",
+    "rconProtocol": "",
+    "privateRule": "Player Password",
+    "privateRuleValue": "Yes",
+    "hiddenRules": [],
+    "eosClientId": "",
+    "eosClientSecret": "",
+    "eosDeploymentId": "",
+    "eosGrantType": ""
+  },
+  "consoleConfig": {
+    "enabled": true,
+    "outputSource": "LogFile",
+    "logFile": "FactoryGame\\Saved\\Logs\\FactoryGame.log",
+    "inputSource": "None",
+    "printRconResponse": false,
+    "outputFilters": "",
+    "stopCommand": "exit",
+    "waitAfterStopCommand": 3000,
+    "screenCaptureTitleBar": false,
+    "screenCaptureQuality": 25,
+    "screenCaptureFPS": 10,
+    "screenCaptureAllowMouse": false,
+    "screenCaptureAllowKeys": false,
+    "screenCaptureMouseHardware": true
+  },
+  "ipPortAllocationConfig": {
+    "usePrimaryIpOnly": false,
+    "useDefaultPortsOnly": false,
+    "supportsIpv6": false,
+    "uniquePort": "Datacenter",
+    "customPorts": [
+      {
+        "id": "GamePort",
+        "port": 7777,
+        "expression": ""
+      },
+      {
+        "id": "QueryPort",
+        "port": 8888,
+        "expression": ""
+      }
+    ],
+    "portIncrement": 10
+  },
+  "fileAndDirectoryConfig": {
+    "relativeExecutable": "FactoryServer.exe",
+    "relativeWorkingDirectory": "",
+    "autoSetupFolderName": "satisfactory",
+    "failOnMissingExecutable": false,
+    "externalDownloadEnable": false,
+    "externalDownloadUrl": ""
+  },
+  "steamConfig": {
+    "steamUpdate": true,
+    "appId": 1690800,
+    "runAsServiceUser": true,
+    "branch": "public",
+    "storeId": 526870,
+    "extraParameters": "",
+    "steamUsername": "anonymous",
+    "steamPassword": "",
+    "steamDownloadRetries": 5,
+    "updateAfterCreateOrReinstall": true,
+    "verifyAll": true,
+    "steamTool": "DepotDownloader"
+  },
+  "gameCommandlineConfig": {
+    "privateCommandline": "",
+    "privateCustomCommandline": ""
+  },
+  "commandlineConfig": {
+    "enableSelection": true,
+    "defaultCommandline": "-log -unattended -multihome=${IPAddress} -Port=${GamePort} -ReliablePort=${QueryPort} -ExternalReliablePort=${QueryPort}",
+    "defaultCustomCommandline": "",
+    "predefinedCommandlines": [
+      {
+        "id": 1,
+        "name": "Default",
+        "commandLine": "-log -unattended -multihome=${IPAddress} -Port=${GamePort} -ReliablePort=${QueryPort} -ExternalReliablePort=${QueryPort}"
+      },
+      {
+        "id": 2,
+        "name": "Disable seasonal events",
+        "commandLine": "-log -unattended -DisableSeasonalEvents -multihome=${IPAddress} -Port=${GamePort} -ReliablePort=${QueryPort} -ExternalReliablePort=${QueryPort}"
+      }
+    ]
+  },
+  "runAsConfig": {
+    "runAs": "OperatingSystemUserPerService",
+    "specificUsername": "",
+    "specificPassword": "",
+    "interactWithDesktop": true,
+    "elevated": false
+  },
+  "gameVariables": [
+    {
+      "name": "BackupFile",
+      "defaultValue": "",
+      "required": true,
+      "requiredMessage": "The backup file is required.",
+      "scriptParameter": true,
+      "commandlineParameter": false,
+      "saveScriptParameter": false,
+      "syncCommandlineParameter": false,
+      "template": "${BackupFile}",
+      "editor": {
+        "items": [],
+        "itemSource": "CustomList",
+        "id": "BackupFile",
+        "defaultValue": "",
+        "label": "Backup:",
+        "description": "Select the backup to restore.",
+        "required": true,
+        "valueType": "string",
+        "requiredMessage": "The backup file is required.",
+        "controlType": "DynamicComboBox",
+        "sm": 6,
+        "xs": 12,
+        "requiresAnyVisible": []
+      },
+      "createdDate": "2026-10-19T05:38:34.529905",
+      "metadata": {},
+      "variableRoles": []
+    }
+  ],
+  "configFiles": [
+    {
+      "id": 44,
+      "relativePath": "FactoryGame\\Saved\\Config\\WindowsServer\\ServerSettings.ini",
+      "description": "Main configuration file",
+      "template": "[/Script/FactoryGame.FGServerSubsystem]\nmAutoPause=True\nmAutoSaveOnDisconnect=True",
+      "order": 0,
+      "enableEditor": false,
+      "editor": []
+    },
+    {
+      "id": 45,
+      "relativePath": "FactoryGame\\Saved\\Config\\WindowsServer\\Game.ini",
+      "description": "Main configuration file",
+      "template": "[/Script/Engine.GameNetworkManager]\nTotalNetBandwidth=104857600\nMaxDynamicBandwidth=104857600\nMinDynamicBandwidth=10485760\nMAXPOSITIONERRORSQUARED=32.00f\nMoveRepSize=512.0f\nCLIENTADJUSTUPDATECOST=512.0f\nbMovementTimeDiscrepancyDetection=false\nbMovementTimeDiscrepancyResolution=false\nbMovementTimeDiscrepancyForceCorrectionsDuringResolution=false\nMAXCLIENTUPDATEINTERVAL=2.20f\nMaxMoveDeltaTime=0.700f\nMaxClientSmoothingDeltaTime=2.20f\nMaxClientForcedUpdateDuration=1.0f\nClientNetSendMoveDeltaTime=0.0332\nClientNetSendMoveDeltaTimeStationary=0.0664\nClientNetSendMoveThrottleOverPlayerCount=99\nServerForcedUpdateHitchThreshold=2.800f\n\n[/Script/Engine.GameSession]\nMaxPlayers=${Slots}",
+      "order": 1,
+      "enableEditor": false,
+      "editor": []
+    },
+    {
+      "id": 46,
+      "relativePath": "FactoryGame\\Saved\\Config\\WindowsServer\\Engine.ini",
+      "description": "Main configuration file",
+      "template": "[CrashReportClient]\nbAgreeToCrashUpload=false\nbImplicitSend=False\n\n[Engine.ErrorHandling]\nbPromptForRemoteDebugging=False\nbPromptForRemoteDebugOnEnsure=False\n\n[/script/onlinesubsystemutils.ipnetdriver]\nMaxInternetClientRate=104857600\nMinInternetClientRate=104857600\nMaxClientRate=104857600\nMinClientRate=104857600\nLanServerMaxTickRate=15\nNetServerMaxTickRate=15\nConnectionTimeout=100.0\nInitialConnectTimeout=200.0\n\n[SystemSettings]\nt.MaxFPS=15\nAllowAsyncRenderThreadUpdates=1\nAllowAsyncRenderThreadUpdatesDuringGamethreadUpdates=1\nnet.UseRecvMulti=0\nnet.RecvMultiCapacity=8192\nnet.IpNetDriverUseReceiveThread=0\nnet.IpConnectionUseSendTasks=1\nnet.IpNetDriverReceiveThreadQueueMaxPackets=8192\nnet.MaxNetStringSize=67108864\nnet.MaxRPCPerNetUpdate=8\ntick.AllowAsyncComponentTicks=1\ntick.AllowConcurrentTickQueue=1\ntick.AllowAsyncTickDispatch=1\ntick.AllowAsyncTickCleanup=1\n\n[/script/engine.player]\nConfiguredInternetSpeed=104857600\nConfiguredLanSpeed=104857600\n\n[/script/socketsubsystemepic.epicnetdriver]\nMaxClientRate=104857600\nMaxInternetClientRate=104857600\n\n[/script/engine.engine]\nbSmoothFrameRate=true\nbUseFixedFrameRate=false\nSmoothedFrameRateRange=(LowerBound=(Type=Inclusive,Value=5.000000),UpperBound=(Type=Exclusive,Value=15.000000))\nMinDesiredFrameRate=8.000000\nFixedFrameRate=15.000000\nNetClientTicksPerSecond=15\n\n[/script/engine.garbagecollectionsettings]\ngc.MaxObjectsNotConsideredByGC=476499\ngc.SizeOfPermanentObjectPool=100378488\ngc.ActorClusteringEnabled=True\ngc.BlueprintClusteringEnabled=True\n\n[/script/engine.streamingsettings]\ns.EventDrivenLoaderEnabled=True\ns.AsyncLoadingThreadEnabled=True",
+      "order": 2,
+      "enableEditor": false,
+      "editor": []
+    }
+  ],
+  "fileSystemPermissions": [],
+  "gamesScripts": [
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "Batch",
+        "operatingSystem": [
+          "Windows"
+        ],
+        "scriptEvents": [
+          "AfterServiceCreated",
+          "AfterServiceReinstalled"
+        ],
+        "name": "MK Link Save Dir",
+        "description": "Moves the server save dir to within the server files dir",
+        "code": "cd /d \u0022C:\\Users\\TCAGame_Svc%ThisService_ServiceId%\\AppData\\Local\u0022\nrmdir FactoryGame /s /q\nMKLink /d FactoryGame \u0022%ThisService_WorkingDirectory%\\FactoryGame\u0022",
+        "runImpersonated": false,
+        "stopService": false,
+        "ignoreErrors": true,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "169cdacd-bed5-4a7b-8bec-720b95e3d325"
+      }
+    },
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "IronPython3",
+        "operatingSystem": [
+          "Windows",
+          "Linux"
+        ],
+        "scriptEvents": [
+          "BeforeServiceReinstalled"
+        ],
+        "name": "Keep backups before reinstall",
+        "description": "Moves backups outside of root.",
+        "code": "import clr;\n\nfrom System import String\nfrom System.IO import Path, Directory\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\ntemp_location = Path.Combine(ThisService.RootDirectory, \u0022..\u0022, String.Format(\u0022_{0}_Backups\u0022, ThisService.ServiceId))\nif Directory.Exists(BACKUP_LOCATION) :\n  Directory.Move(BACKUP_LOCATION, temp_location)",
+        "runImpersonated": false,
+        "stopService": false,
+        "ignoreErrors": false,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "d4109e14-5636-4dd3-bbc2-f1b312d5d264"
+      }
+    },
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "IronPython3",
+        "operatingSystem": [
+          "Windows",
+          "Linux"
+        ],
+        "scriptEvents": [
+          "AfterServiceReinstalled"
+        ],
+        "name": "Restore backups after install",
+        "description": "Moves backups back into root.",
+        "code": "import clr;\n\nfrom System import String\nfrom System.IO import Path, Directory\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\ntemp_location = Path.Combine(ThisService.RootDirectory, \u0022..\u0022, String.Format(\u0022_{0}_Backups\u0022, ThisService.ServiceId))\nif Directory.Exists(temp_location) :\n  Directory.Move(temp_location, BACKUP_LOCATION)",
+        "runImpersonated": false,
+        "stopService": false,
+        "ignoreErrors": false,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "bdd3b32b-1413-4bc7-8b2a-3e73cf564b89"
+      }
+    },
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "IronPython3",
+        "operatingSystem": [
+          "Windows",
+          "Linux"
+        ],
+        "scriptEvents": [
+          "CustomServiceIcon"
+        ],
+        "name": "Backup Your Server",
+        "description": "Create a backup of your game server.",
+        "code": "import clr;\nclr.AddReference(\u0022TCAdmin.SDK\u0022);\n\nimport System;\nfrom System import Array, String, DateTime, Exception, Environment, PlatformID\nfrom System.IO import Path, DirectoryInfo, SearchOption\nfrom System.Collections.Generic import List\nfrom System.Globalization import CultureInfo\nfrom TCAdmin.SDK.Misc import CompressionTools, Linux, Windows\n\nclr.AddReference(\u0022System.Core\u0022)\nclr.ImportExtensions(System.Linq)\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\n# Specify the maximum number of backups to keep.\nMAX_BACKUPS = 5\n\n# Extension of files that will be included in the backup.\n# Only specify config file extensions to keep file size small. Avoid log extensions.\n# For security do not backup executables (.exe, .dll or .so, etc). Use \u0022.*\u0022 to backup all extensions in the specified folder.\nBACKUP_EXTENSIONS = Array[str]([ \u0022.*\u0022])\n\n# Extensions that are excluded from the backup. (only used if you specify \u0022.*\u0022 in BACKUP_EXTENSIONS)\nBACKUP_EXCLUDE_EXTENSIONS = Array[str]([\u0022.xxx\u0022])\n\n# Specify the folder to backup. Sub folders will be included in the backup.\n# All files with the extensions specified in BACKUP_EXTENSIONS will be added to the backup.\n# Set value to ThisService.RootDirectory if you want to backup all specified extensions in the game server\u0027s root folder and sub folders.\nFOLDER_TO_BACKUP = Path.Combine(ThisService.RootDirectory, \u0022FactoryGame\u0022, \u0022Saved\u0022, \u0022SaveGames\u0022)\n\nbackupdir = DirectoryInfo(FOLDER_TO_BACKUP)\nbackupfilename = String.Format(\u0022{0}.zip\u0022, DateTime.Now.ToString(\u0022ddMMyyyy-HHmmss\u0022, CultureInfo.InvariantCulture))\nallfiles = backupdir.GetFiles(\u0022*\u0022, SearchOption.AllDirectories)\nbackupfiles = List[str]()\n\nfor file in allfiles:\n  if not file.FullName.StartsWith(BACKUP_LOCATION) :\n    if Array.IndexOf(BACKUP_EXTENSIONS, file.Extension) != -1 or (Array.IndexOf(BACKUP_EXTENSIONS, \u0022.*\u0022) != -1 and Array.IndexOf(BACKUP_EXCLUDE_EXTENSIONS, file.Extension) == -1 ) :\n      backupfiles.Add(file.FullName.Replace(ThisService.RootDirectory, String.Empty).TrimStart(Path.DirectorySeparatorChar))\n   \nif backupfiles.Count == 0 :\n  raise Exception(\u0022Didn\\\u0027t find any files to backup.\u0022)\n\nScript.WriteToConsole(String.Format(\u0022Backing up {0} files to {1}...\u0022, backupfiles.Count, backupfilename))\n \nbackuplocation = DirectoryInfo(BACKUP_LOCATION)\nif not backuplocation.Exists :\n  backuplocation.Create()\n\ncompressiontools = CompressionTools()\ncompressiontools.Compress(ThisService.RootDirectory, backupfiles.ToArray(), Path.Combine(BACKUP_LOCATION, backupfilename))\nScript.WriteToConsole(\u0022The backup was created successfully.\u0022)\n\nbackupfiles=backuplocation.GetFiles(\u0022*.zip\u0022).OrderBy(lambda f: f.CreationTime).ToArray()\nfor i in range(0,backupfiles.Count - MAX_BACKUPS):\n  backupfiles[i].Delete()\n  Script.WriteToConsole(String.Format (\u0022Deleted previous backup: {0}\u0022, backupfiles[i].Name))\n\nif Environment.OSVersion.Platform == PlatformID.Unix :\n  if Linux.IsRoot() :\n    Linux.SetDirectoryOwnerAutoDetect(BACKUP_LOCATION, True);\nelse :\n owner = Windows.GetOwner(ThisService.RootDirectory);\n Windows.SetDirectoryOwner(BACKUP_LOCATION, str(owner), True);",
+        "runImpersonated": false,
+        "stopService": true,
+        "ignoreErrors": false,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "6ffcde55-61f7-405d-97ee-dc95cd58ccc8"
+      }
+    },
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "IronPython3",
+        "operatingSystem": [
+          "Windows",
+          "Linux"
+        ],
+        "scriptEvents": [
+          "CustomServiceIcon"
+        ],
+        "name": "Restore Your Server",
+        "description": "Restore your game server from a backup.",
+        "code": "import clr;\nclr.AddReference(\u0022TCAdmin.SDK\u0022);\n\nfrom System.IO import Path\nfrom System import String, Environment, PlatformID\nfrom TCAdmin.SDK.Misc import CompressionTools, Linux, Windows\n\nScript.WriteToConsole(String.Format(\u0022Restoring backup {0}...\u0022, Path.GetFileNameWithoutExtension(ThisService.Variables[\u0022BackupFile\u0022])))\n\ncompressiontools = CompressionTools()\ncompressiontools.Decompress(ThisService.Variables[\u0022BackupFile\u0022], ThisService.RootDirectory)\n\nif Environment.OSVersion.Platform == PlatformID.Unix :\n  if Linux.IsRoot() :\n    Linux.SetDirectoryOwnerAutoDetect(ThisService.RootDirectory, True);\nelse:\n owner = Windows.GetOwner(ThisService.RootDirectory);\n Windows.SetDirectoryOwner(ThisService.RootDirectory, str(owner), True);\n\nScript.WriteToConsole(\u0022The backup was restored successfully.\u0022)",
+        "runImpersonated": false,
+        "stopService": true,
+        "ignoreErrors": false,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "1fc0a991-98f8-4b22-936e-8bd6419752ad"
+      }
+    },
+    {
+      "script": {
+        "allGames": false,
+        "global": false,
+        "scriptEngine": "IronPython3",
+        "operatingSystem": [
+          "Windows",
+          "Linux"
+        ],
+        "scriptEvents": [
+          "CustomQueryProtocol"
+        ],
+        "name": "Server query",
+        "description": "Server query",
+        "code": "import clr\nimport System\nfrom System import String\nfrom System.Net import HttpWebRequest\nfrom System.IO import StreamReader\nfrom System.Text import Encoding\nimport json\n\nip = ThisService.IpAddress\nport = ThisService.GamePort\n\nxml_format = \u0027\u0027\u0027\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003Cqstat\u003E\n  \u003Cserver type=\u0022CUSTOM\u0022 address=\u0022{0}:{1}\u0022 status=\u0022{2}\u0022\u003E\n    \u003Chostname\u003E{0}:{1}\u003C/hostname\u003E\n    \u003Cname\u003E{3}\u003C/name\u003E\n    \u003Cgametype\u003EFactory Game\u003C/gametype\u003E\n    \u003Cmap\u003ESatisfactory\u003C/map\u003E\n    \u003Cnumplayers\u003E{4}\u003C/numplayers\u003E\n    \u003Cmaxplayers\u003E{5}\u003C/maxplayers\u003E\n    \u003Crules\u003E{6}\u003C/rules\u003E\n  \u003C/server\u003E\n\u003C/qstat\u003E\u0027\u0027\u0027\n\nstatus = \u0022DOWN\u0022\nname = \u0022Satisfactory Server\u0022\nnum_players = 0\nmax_players = 16\nrules = \u0022\u0022\n\ndef call_api(function_name):\n    try:\n        url = \u0022https://{}:{}/api/v1\u0022.format(ip, port)\n        request = HttpWebRequest.Create(url)\n        request.Method = \u0022POST\u0022\n        request.ContentType = \u0022application/json\u0022\n        request.Timeout = 15000\n        request.ServerCertificateValidationCallback = lambda s, c, ch, e: True\n\n        body = json.dumps({\u0022function\u0022: function_name, \u0022data\u0022: {}})\n        bytes_body = Encoding.UTF8.GetBytes(body)\n        request.ContentLength = bytes_body.Length\n\n        stream = request.GetRequestStream()\n        stream.Write(bytes_body, 0, bytes_body.Length)\n        stream.Close()\n\n        response = request.GetResponse()\n        reader = StreamReader(response.GetResponseStream())\n        text = reader.ReadToEnd()\n        reader.Close()\n        response.Close()\n        return json.loads(text)\n    except:\n        return None\n\ntry:\n    # Main server state\n    state = call_api(\u0022QueryServerState\u0022)\n    if state and \u0022data\u0022 in state and \u0022serverGameState\u0022 in state[\u0022data\u0022]:\n        gs = state[\u0022data\u0022][\u0022serverGameState\u0022]\n        \n        status = \u0022UP\u0022\n        name = gs.get(\u0022activeSessionName\u0022, \u0022Satisfactory Server\u0022)\n        num_players = gs.get(\u0022numConnectedPlayers\u0022, 0)\n        max_players = gs.get(\u0022playerLimit\u0022, 16)\n\n        # Clean phase name\n        raw = str(gs.get(\u0022gamePhase\u0022, \u0022Unknown\u0022))\n        if \u0022Phase_\u0022 in raw:\n            phase_num = raw.split(\u0022Phase_\u0022)[-1].split(\u0022.\u0022)[0].replace(\u0022\u0027\u0022, \u0022\u0022).strip()\n            phase = \u0022Phase \u0022 \u002B phase_num\n        else:\n            phase = raw\n\n        rules \u002B= \u0027\u003Crule name=\u0022Phase\u0022\u003E{}\u003C/rule\u003E\u0027.format(phase)\n        rules \u002B= \u0027\u003Crule name=\u0022Running\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022isGameRunning\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Paused\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022isGamePaused\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Tech Tier\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022techTier\u0022, 0))\n        rules \u002B= \u0027\u003Crule name=\u0022Playtime (min)\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022totalGameDuration\u0022, 0) // 60)\n        rules \u002B= \u0027\u003Crule name=\u0022Tick Rate\u0022\u003E{}\u003C/rule\u003E\u0027.format(round(gs.get(\u0022averageTickRate\u0022, 0), 1))\n\n    # Server options (password, creative, etc.)\n    opt_data = call_api(\u0022GetServerOptions\u0022)\n    if opt_data and \u0022data\u0022 in opt_data:\n        opt = opt_data[\u0022data\u0022].get(\u0022ServerOptions\u0022, opt_data[\u0022data\u0022])\n        \n        has_password = any(\u0022password\u0022 in str(k).lower() and str(v).lower() in [\u0022true\u0022,\u00221\u0022,\u0022yes\u0022] \n                         for k, v in opt.items())\n        \n        rules \u002B= \u0027\u003Crule name=\u0022Player Password\u0022\u003E{}\u003C/rule\u003E\u0027.format(\u0022Yes\u0022 if has_password else \u0022No\u0022)\n        rules \u002B= \u0027\u003Crule name=\u0022Creative Mode\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022bEnableCreativeMode\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Advanced Settings\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022bEnableAdvancedGameSettings\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Session Visibility\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022SessionVisibility\u0022, \u0022Private\u0022))\n\nexcept Exception as ex:\n    rules \u002B= \u0027\u003Crule name=\u0022Debug\u0022\u003EError: {}\u003C/rule\u003E\u0027.format(str(ex)[:80])\n\nReturnValue = String.Format(xml_format, ip, port, status, name, num_players, max_players, rules)",
+        "runImpersonated": false,
+        "stopService": false,
+        "ignoreErrors": true,
+        "order": 0,
+        "icon": "",
+        "scriptInputVariables": [],
+        "scriptRoles": [],
+        "editor": [],
+        "translations": [],
+        "identifier": "b5eff640-18bc-4968-aa50-5f3af24a513b"
+      }
+    }
+  ],
+  "customModProviderConfigs": [],
+  "gamesCustomLinks": [],
+  "updates": [],
+  "createdDate": "2026-10-19T05:38:48.086255",
+  "metadata": {},
+  "backupConfig": {
+    "enabled": false,
+    "backupType": "Full",
+    "compressBackup": true,
+    "stopServiceBeforeBackup": false,
+    "includedPaths": []
+  },
+  "rolePermissions": [
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "CpuStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "FileManager",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "FTP",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "LiveStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Logs",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "ServiceActivity",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Console",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "MemoryStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "PlayerStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Reinstall",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "SteamUpdate",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "CpuStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "FileManager",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "FTP",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "LiveStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Logs",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "ServiceActivity",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Console",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "MemoryStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "PlayerStats",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Reinstall",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "SteamUpdate",
+      "moduleData": "",
+      "granted": true
+    }
+  ],
+  "mods": [],
+  "queryMonitoringConfig": {
+    "enabled": true,
+    "checkInterval": "00:05:00",
+    "startupGracePeriod": "00:10:00",
+    "retryDelay": "00:00:30",
+    "failureThreshold": 3,
+    "failureAction": "Restart, SendEmail",
+    "maxFailureAction": "Stop, SendEmail",
+    "logActivityOnFailure": true,
+    "autoRestartOnExit": true,
+    "autoRestartDelay": "00:00:05",
+    "autoRestartMaxAttempts": 3,
+    "autoRestartWindow": "00:05:00",
+    "logUnexpectedExit": true,
+    "slotDetectionEnabled": true,
+    "slotDetectionAction": "Stop, SendEmail",
+    "additionalAllowedSlots": 0,
+    "privateDetectionEnabled": true,
+    "privateDetectionAction": "SendEmail",
+    "brandDetectionEnabled": true,
+    "brandDetectionAction": "Stop, SendEmail",
+    "brandedText": "",
+    "brandedTextAtEnd": false,
+    "brandedTextAddSpace": false,
+    "brandRegex": "",
+    "brandRegexCaseInsensitive": false,
+    "rules": []
+  },
+  "fastDLConfig": {
+    "enabled": false,
+    "relativeRoot": "",
+    "urlExpression": "${FastDownloadBaseUrl}/",
+    "includePatterns": [],
+    "excludePatterns": [],
+    "syncOnServiceCreate": false,
+    "autoSyncOnFileChange": false,
+    "compression": "None",
+    "requiresHttps": false,
+    "stripPaths": [
+      "addons/"
+    ]
+  },
+  "environmentVariables": []
+}
