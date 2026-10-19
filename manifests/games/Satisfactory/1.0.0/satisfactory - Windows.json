@@ -117,37 +117,7 @@
     "interactWithDesktop": true,
     "elevated": false
   },
-  "gameVariables": [
-    {
-      "name": "BackupFile",
-      "defaultValue": "",
-      "required": true,
-      "requiredMessage": "The backup file is required.",
-      "scriptParameter": true,
-      "commandlineParameter": false,
-      "saveScriptParameter": false,
-      "syncCommandlineParameter": false,
-      "template": "${BackupFile}",
-      "editor": {
-        "items": [],
-        "itemSource": "CustomList",
-        "id": "BackupFile",
-        "defaultValue": "",
-        "label": "Backup:",
-        "description": "Select the backup to restore.",
-        "required": true,
-        "valueType": "string",
-        "requiredMessage": "The backup file is required.",
-        "controlType": "DynamicComboBox",
-        "sm": 6,
-        "xs": 12,
-        "requiresAnyVisible": []
-      },
-      "createdDate": "2026-10-19T05:38:34.529905",
-      "metadata": {},
-      "variableRoles": []
-    }
-  ],
+  "gameVariables": [],
   "configFiles": [
     {
       "id": 44,
@@ -188,13 +158,12 @@
           "Windows"
         ],
         "scriptEvents": [
-          "AfterServiceCreated",
-          "AfterServiceReinstalled"
+          "BeforeServiceStarted"
         ],
-        "name": "MK Link Save Dir",
-        "description": "Moves the server save dir to within the server files dir",
-        "code": "cd /d \u0022C:\\Users\\TCAGame_Svc%ThisService_ServiceId%\\AppData\\Local\u0022\nrmdir FactoryGame /s /q\nMKLink /d FactoryGame \u0022%ThisService_WorkingDirectory%\\FactoryGame\u0022",
-        "runImpersonated": false,
+        "name": "Link save folder into the service root",
+        "description": "Points the service user's LOCALAPPDATA\\FactoryGame\\Saved\\SaveGames at FactoryGame\\Saved\\SaveGames in the service root, so saves are in the file manager and backups.",
+        "code": "setlocal EnableExtensions EnableDelayedExpansion\nrem Satisfactory's Windows server saves to the run-as user's LOCALAPPDATA\\FactoryGame\\Saved\\SaveGames.\nrem Turn that folder into a junction to the service root's FactoryGame\\Saved\\SaveGames so the saves show\nrem up in the file manager and in backups. Runs impersonated as the service user before every start - it\nrem owns both folders, so nothing runs with elevated rights. The profile only exists after the first\nrem start, so a run before that is a no-op. LOCALAPPDATA is not the service user's in this process,\nrem hence the registry lookup. TCAdmin runs this code inside a parenthesised block: variables set here\nrem must be read with !delayed! expansion.\nset \"SID=\"\nfor /f \"tokens=2 delims=,\" %%S in ('whoami /user /fo csv /nh') do set \"SID=%%~S\"\nif not defined SID exit /b 0\nset \"PROFILEDIR=\"\nfor /f \"tokens=2,*\" %%A in ('reg query \"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\!SID!\" /v ProfileImagePath 2^>nul ^| findstr /i ProfileImagePath') do set \"PROFILEDIR=%%B\"\nif not defined PROFILEDIR exit /b 0\ncall set \"PROFILEDIR=!PROFILEDIR!\"\nif not exist \"!PROFILEDIR!\\AppData\\Local\\\" exit /b 0\n\nset \"SAVEPARENT=!PROFILEDIR!\\AppData\\Local\\FactoryGame\\Saved\"\nset \"SRC=!SAVEPARENT!\\SaveGames\"\nset \"DST=%ThisService_RootDirectory%\\FactoryGame\\Saved\\SaveGames\"\nif not exist \"!DST!\\\" mkdir \"!DST!\" || exit /b 1\n\nrem A junction from an earlier start: rmdir removes only the link, never its target.\ndir /a:l /b \"!SAVEPARENT!\" 2>nul | findstr /x /i \"SaveGames\" >nul && rmdir \"!SRC!\"\n\nrem Saves written before the junction existed move into the service root. Nothing is overwritten:\nrem leftovers that clash with an existing file are set aside in the profile.\nif exist \"!SRC!\\\" (\n  robocopy \"!SRC!\" \"!DST!\" /E /MOVE /XJ /XC /XN /XO /R:0 /W:0 /NFL /NDL /NJH /NJS /NP >nul\n  if exist \"!SRC!\\\" ren \"!SRC!\" \"SaveGames.unmerged.!RANDOM!\"\n)\n\nif not exist \"!SAVEPARENT!\\\" mkdir \"!SAVEPARENT!\" || exit /b 1\nmklink /J \"!SRC!\" \"!DST!\"\n",
+        "runImpersonated": true,
         "stopService": false,
         "ignoreErrors": true,
         "order": 0,
@@ -203,122 +172,14 @@
         "scriptRoles": [],
         "editor": [],
         "translations": [],
-        "identifier": "169cdacd-bed5-4a7b-8bec-720b95e3d325"
+        "identifier": "5b0d9a63-3c61-4f0e-9a51-2f6d2b8e7c41"
       }
     },
     {
       "script": {
         "allGames": false,
         "global": false,
-        "scriptEngine": "IronPython3",
-        "operatingSystem": [
-          "Windows",
-          "Linux"
-        ],
-        "scriptEvents": [
-          "BeforeServiceReinstalled"
-        ],
-        "name": "Keep backups before reinstall",
-        "description": "Moves backups outside of root.",
-        "code": "import clr;\n\nfrom System import String\nfrom System.IO import Path, Directory\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\ntemp_location = Path.Combine(ThisService.RootDirectory, \u0022..\u0022, String.Format(\u0022_{0}_Backups\u0022, ThisService.ServiceId))\nif Directory.Exists(BACKUP_LOCATION) :\n  Directory.Move(BACKUP_LOCATION, temp_location)",
-        "runImpersonated": false,
-        "stopService": false,
-        "ignoreErrors": false,
-        "order": 0,
-        "icon": "",
-        "scriptInputVariables": [],
-        "scriptRoles": [],
-        "editor": [],
-        "translations": [],
-        "identifier": "d4109e14-5636-4dd3-bbc2-f1b312d5d264"
-      }
-    },
-    {
-      "script": {
-        "allGames": false,
-        "global": false,
-        "scriptEngine": "IronPython3",
-        "operatingSystem": [
-          "Windows",
-          "Linux"
-        ],
-        "scriptEvents": [
-          "AfterServiceReinstalled"
-        ],
-        "name": "Restore backups after install",
-        "description": "Moves backups back into root.",
-        "code": "import clr;\n\nfrom System import String\nfrom System.IO import Path, Directory\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\ntemp_location = Path.Combine(ThisService.RootDirectory, \u0022..\u0022, String.Format(\u0022_{0}_Backups\u0022, ThisService.ServiceId))\nif Directory.Exists(temp_location) :\n  Directory.Move(temp_location, BACKUP_LOCATION)",
-        "runImpersonated": false,
-        "stopService": false,
-        "ignoreErrors": false,
-        "order": 0,
-        "icon": "",
-        "scriptInputVariables": [],
-        "scriptRoles": [],
-        "editor": [],
-        "translations": [],
-        "identifier": "bdd3b32b-1413-4bc7-8b2a-3e73cf564b89"
-      }
-    },
-    {
-      "script": {
-        "allGames": false,
-        "global": false,
-        "scriptEngine": "IronPython3",
-        "operatingSystem": [
-          "Windows",
-          "Linux"
-        ],
-        "scriptEvents": [
-          "CustomServiceIcon"
-        ],
-        "name": "Backup Your Server",
-        "description": "Create a backup of your game server.",
-        "code": "import clr;\nclr.AddReference(\u0022TCAdmin.SDK\u0022);\n\nimport System;\nfrom System import Array, String, DateTime, Exception, Environment, PlatformID\nfrom System.IO import Path, DirectoryInfo, SearchOption\nfrom System.Collections.Generic import List\nfrom System.Globalization import CultureInfo\nfrom TCAdmin.SDK.Misc import CompressionTools, Linux, Windows\n\nclr.AddReference(\u0022System.Core\u0022)\nclr.ImportExtensions(System.Linq)\n\n# Specify where backups are saved.\n# Default location is a folder named Backups in the game server\u0027s root.\nBACKUP_LOCATION = Path.Combine(ThisService.RootDirectory, \u0022Backups\u0022)\n\n# Specify the maximum number of backups to keep.\nMAX_BACKUPS = 5\n\n# Extension of files that will be included in the backup.\n# Only specify config file extensions to keep file size small. Avoid log extensions.\n# For security do not backup executables (.exe, .dll or .so, etc). Use \u0022.*\u0022 to backup all extensions in the specified folder.\nBACKUP_EXTENSIONS = Array[str]([ \u0022.*\u0022])\n\n# Extensions that are excluded from the backup. (only used if you specify \u0022.*\u0022 in BACKUP_EXTENSIONS)\nBACKUP_EXCLUDE_EXTENSIONS = Array[str]([\u0022.xxx\u0022])\n\n# Specify the folder to backup. Sub folders will be included in the backup.\n# All files with the extensions specified in BACKUP_EXTENSIONS will be added to the backup.\n# Set value to ThisService.RootDirectory if you want to backup all specified extensions in the game server\u0027s root folder and sub folders.\nFOLDER_TO_BACKUP = Path.Combine(ThisService.RootDirectory, \u0022FactoryGame\u0022, \u0022Saved\u0022, \u0022SaveGames\u0022)\n\nbackupdir = DirectoryInfo(FOLDER_TO_BACKUP)\nbackupfilename = String.Format(\u0022{0}.zip\u0022, DateTime.Now.ToString(\u0022ddMMyyyy-HHmmss\u0022, CultureInfo.InvariantCulture))\nallfiles = backupdir.GetFiles(\u0022*\u0022, SearchOption.AllDirectories)\nbackupfiles = List[str]()\n\nfor file in allfiles:\n  if not file.FullName.StartsWith(BACKUP_LOCATION) :\n    if Array.IndexOf(BACKUP_EXTENSIONS, file.Extension) != -1 or (Array.IndexOf(BACKUP_EXTENSIONS, \u0022.*\u0022) != -1 and Array.IndexOf(BACKUP_EXCLUDE_EXTENSIONS, file.Extension) == -1 ) :\n      backupfiles.Add(file.FullName.Replace(ThisService.RootDirectory, String.Empty).TrimStart(Path.DirectorySeparatorChar))\n   \nif backupfiles.Count == 0 :\n  raise Exception(\u0022Didn\\\u0027t find any files to backup.\u0022)\n\nScript.WriteToConsole(String.Format(\u0022Backing up {0} files to {1}...\u0022, backupfiles.Count, backupfilename))\n \nbackuplocation = DirectoryInfo(BACKUP_LOCATION)\nif not backuplocation.Exists :\n  backuplocation.Create()\n\ncompressiontools = CompressionTools()\ncompressiontools.Compress(ThisService.RootDirectory, backupfiles.ToArray(), Path.Combine(BACKUP_LOCATION, backupfilename))\nScript.WriteToConsole(\u0022The backup was created successfully.\u0022)\n\nbackupfiles=backuplocation.GetFiles(\u0022*.zip\u0022).OrderBy(lambda f: f.CreationTime).ToArray()\nfor i in range(0,backupfiles.Count - MAX_BACKUPS):\n  backupfiles[i].Delete()\n  Script.WriteToConsole(String.Format (\u0022Deleted previous backup: {0}\u0022, backupfiles[i].Name))\n\nif Environment.OSVersion.Platform == PlatformID.Unix :\n  if Linux.IsRoot() :\n    Linux.SetDirectoryOwnerAutoDetect(BACKUP_LOCATION, True);\nelse :\n owner = Windows.GetOwner(ThisService.RootDirectory);\n Windows.SetDirectoryOwner(BACKUP_LOCATION, str(owner), True);",
-        "runImpersonated": false,
-        "stopService": true,
-        "ignoreErrors": false,
-        "order": 0,
-        "icon": "",
-        "scriptInputVariables": [],
-        "scriptRoles": [],
-        "editor": [],
-        "translations": [],
-        "identifier": "6ffcde55-61f7-405d-97ee-dc95cd58ccc8"
-      }
-    },
-    {
-      "script": {
-        "allGames": false,
-        "global": false,
-        "scriptEngine": "IronPython3",
-        "operatingSystem": [
-          "Windows",
-          "Linux"
-        ],
-        "scriptEvents": [
-          "CustomServiceIcon"
-        ],
-        "name": "Restore Your Server",
-        "description": "Restore your game server from a backup.",
-        "code": "import clr;\nclr.AddReference(\u0022TCAdmin.SDK\u0022);\n\nfrom System.IO import Path\nfrom System import String, Environment, PlatformID\nfrom TCAdmin.SDK.Misc import CompressionTools, Linux, Windows\n\nScript.WriteToConsole(String.Format(\u0022Restoring backup {0}...\u0022, Path.GetFileNameWithoutExtension(ThisService.Variables[\u0022BackupFile\u0022])))\n\ncompressiontools = CompressionTools()\ncompressiontools.Decompress(ThisService.Variables[\u0022BackupFile\u0022], ThisService.RootDirectory)\n\nif Environment.OSVersion.Platform == PlatformID.Unix :\n  if Linux.IsRoot() :\n    Linux.SetDirectoryOwnerAutoDetect(ThisService.RootDirectory, True);\nelse:\n owner = Windows.GetOwner(ThisService.RootDirectory);\n Windows.SetDirectoryOwner(ThisService.RootDirectory, str(owner), True);\n\nScript.WriteToConsole(\u0022The backup was restored successfully.\u0022)",
-        "runImpersonated": false,
-        "stopService": true,
-        "ignoreErrors": false,
-        "order": 0,
-        "icon": "",
-        "scriptInputVariables": [],
-        "scriptRoles": [],
-        "editor": [],
-        "translations": [],
-        "identifier": "1fc0a991-98f8-4b22-936e-8bd6419752ad"
-      }
-    },
-    {
-      "script": {
-        "allGames": false,
-        "global": false,
-        "scriptEngine": "IronPython3",
+        "scriptEngine": "CSharp",
         "operatingSystem": [
           "Windows",
           "Linux"
@@ -327,8 +188,8 @@
           "CustomQueryProtocol"
         ],
         "name": "Server query",
-        "description": "Server query",
-        "code": "import clr\nimport System\nfrom System import String\nfrom System.Net import HttpWebRequest\nfrom System.IO import StreamReader\nfrom System.Text import Encoding\nimport json\n\nip = ThisService.IpAddress\nport = ThisService.GamePort\n\nxml_format = \u0027\u0027\u0027\u003C?xml version=\u00221.0\u0022 encoding=\u0022UTF-8\u0022?\u003E\n\u003Cqstat\u003E\n  \u003Cserver type=\u0022CUSTOM\u0022 address=\u0022{0}:{1}\u0022 status=\u0022{2}\u0022\u003E\n    \u003Chostname\u003E{0}:{1}\u003C/hostname\u003E\n    \u003Cname\u003E{3}\u003C/name\u003E\n    \u003Cgametype\u003EFactory Game\u003C/gametype\u003E\n    \u003Cmap\u003ESatisfactory\u003C/map\u003E\n    \u003Cnumplayers\u003E{4}\u003C/numplayers\u003E\n    \u003Cmaxplayers\u003E{5}\u003C/maxplayers\u003E\n    \u003Crules\u003E{6}\u003C/rules\u003E\n  \u003C/server\u003E\n\u003C/qstat\u003E\u0027\u0027\u0027\n\nstatus = \u0022DOWN\u0022\nname = \u0022Satisfactory Server\u0022\nnum_players = 0\nmax_players = 16\nrules = \u0022\u0022\n\ndef call_api(function_name):\n    try:\n        url = \u0022https://{}:{}/api/v1\u0022.format(ip, port)\n        request = HttpWebRequest.Create(url)\n        request.Method = \u0022POST\u0022\n        request.ContentType = \u0022application/json\u0022\n        request.Timeout = 15000\n        request.ServerCertificateValidationCallback = lambda s, c, ch, e: True\n\n        body = json.dumps({\u0022function\u0022: function_name, \u0022data\u0022: {}})\n        bytes_body = Encoding.UTF8.GetBytes(body)\n        request.ContentLength = bytes_body.Length\n\n        stream = request.GetRequestStream()\n        stream.Write(bytes_body, 0, bytes_body.Length)\n        stream.Close()\n\n        response = request.GetResponse()\n        reader = StreamReader(response.GetResponseStream())\n        text = reader.ReadToEnd()\n        reader.Close()\n        response.Close()\n        return json.loads(text)\n    except:\n        return None\n\ntry:\n    # Main server state\n    state = call_api(\u0022QueryServerState\u0022)\n    if state and \u0022data\u0022 in state and \u0022serverGameState\u0022 in state[\u0022data\u0022]:\n        gs = state[\u0022data\u0022][\u0022serverGameState\u0022]\n        \n        status = \u0022UP\u0022\n        name = gs.get(\u0022activeSessionName\u0022, \u0022Satisfactory Server\u0022)\n        num_players = gs.get(\u0022numConnectedPlayers\u0022, 0)\n        max_players = gs.get(\u0022playerLimit\u0022, 16)\n\n        # Clean phase name\n        raw = str(gs.get(\u0022gamePhase\u0022, \u0022Unknown\u0022))\n        if \u0022Phase_\u0022 in raw:\n            phase_num = raw.split(\u0022Phase_\u0022)[-1].split(\u0022.\u0022)[0].replace(\u0022\u0027\u0022, \u0022\u0022).strip()\n            phase = \u0022Phase \u0022 \u002B phase_num\n        else:\n            phase = raw\n\n        rules \u002B= \u0027\u003Crule name=\u0022Phase\u0022\u003E{}\u003C/rule\u003E\u0027.format(phase)\n        rules \u002B= \u0027\u003Crule name=\u0022Running\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022isGameRunning\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Paused\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022isGamePaused\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Tech Tier\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022techTier\u0022, 0))\n        rules \u002B= \u0027\u003Crule name=\u0022Playtime (min)\u0022\u003E{}\u003C/rule\u003E\u0027.format(gs.get(\u0022totalGameDuration\u0022, 0) // 60)\n        rules \u002B= \u0027\u003Crule name=\u0022Tick Rate\u0022\u003E{}\u003C/rule\u003E\u0027.format(round(gs.get(\u0022averageTickRate\u0022, 0), 1))\n\n    # Server options (password, creative, etc.)\n    opt_data = call_api(\u0022GetServerOptions\u0022)\n    if opt_data and \u0022data\u0022 in opt_data:\n        opt = opt_data[\u0022data\u0022].get(\u0022ServerOptions\u0022, opt_data[\u0022data\u0022])\n        \n        has_password = any(\u0022password\u0022 in str(k).lower() and str(v).lower() in [\u0022true\u0022,\u00221\u0022,\u0022yes\u0022] \n                         for k, v in opt.items())\n        \n        rules \u002B= \u0027\u003Crule name=\u0022Player Password\u0022\u003E{}\u003C/rule\u003E\u0027.format(\u0022Yes\u0022 if has_password else \u0022No\u0022)\n        rules \u002B= \u0027\u003Crule name=\u0022Creative Mode\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022bEnableCreativeMode\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Advanced Settings\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022bEnableAdvancedGameSettings\u0022, False))\n        rules \u002B= \u0027\u003Crule name=\u0022Session Visibility\u0022\u003E{}\u003C/rule\u003E\u0027.format(opt.get(\u0022SessionVisibility\u0022, \u0022Private\u0022))\n\nexcept Exception as ex:\n    rules \u002B= \u0027\u003Crule name=\u0022Debug\u0022\u003EError: {}\u003C/rule\u003E\u0027.format(str(ex)[:80])\n\nReturnValue = String.Format(xml_format, ip, port, status, name, num_players, max_players, rules)",
+        "description": "Queries the server over the Satisfactory HTTPS API (game port).",
+        "code": "//refAssemblies: TCAdmin.SDK.dll, TCAdmin.GameHosting.SDK.dll, TCAdmin.Scripting.dll, TCAdmin.Web.Shared.dll\nusing System;\nusing System.Buffers.Binary;\nusing System.Collections.Generic;\nusing System.Globalization;\nusing System.Net;\nusing System.Net.Http;\nusing System.Net.Sockets;\nusing System.Security.Cryptography;\nusing System.Text;\nusing System.Text.Json;\nusing TCAdmin.SDK.Hubs.Models.GameQuery;\n\nvar Globals = new TCAdmin.Scripting.Engines.Addons.CSharpGameGlobals(); // DO NOT MODIFY THIS LINE\n\n// Satisfactory 1.0+ has two query surfaces, both on the GAME port:\n// - the HTTPS API (TCP, self-signed certificate). HealthCheck needs no token. The session details need one,\n//   which PasswordlessLogin hands out unless a player (client) password is set.\n// - the Lightweight Query API (UDP). It needs no auth and is the only place that reports the server NAME\n//   (set in-game when claiming, or in the Server Manager). The panel copies the query's Name into the\n//   service name, so returning it here is how an in-game rename reaches the panel.\n// Every UDP poll lands on the game's own socket and the server logs a \"LogNet: NotifyAcceptingConnection\" line\n// for it, so the name is polled at most every NamePollInterval and reused in between. The cache lives in the\n// monitor's AppDomain data (keyed per service, address and port), as BCL types only, so it survives the script\n// being recompiled.\n// The monitor gives the whole script 10 seconds; the timeouts below keep the worst case under that.\nstring address = Variables.Parse<string>(\"Address\", null);\nif (string.IsNullOrEmpty(address))\n    address = ThisService.IPAddress;\nint port = ThisService.GamePort;\nstring url = $\"https://{address}:{port}/api/v1\";\n\nstatic JsonElement CallApi(HttpClient client, string apiUrl, string function, object data, string token, out int status)\n{\n    var request = new HttpRequestMessage(HttpMethod.Post, apiUrl)\n    {\n        Content = new StringContent(JsonSerializer.Serialize(new { function, data }), Encoding.UTF8, \"application/json\")\n    };\n    if (!string.IsNullOrEmpty(token))\n        request.Headers.TryAddWithoutValidation(\"Authorization\", \"Bearer \" + token);\n    using var response = client.Send(request);\n    status = (int)response.StatusCode;\n    string body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();\n    return string.IsNullOrWhiteSpace(body) ? default : JsonDocument.Parse(body).RootElement.Clone();\n}\n\nstatic string Str(JsonElement e, string name, string fallback = \"\") =>\n    e.ValueKind == JsonValueKind.Object && e.TryGetProperty(name, out var v)\n        ? (v.ValueKind == JsonValueKind.String ? v.GetString() : v.ToString())\n        : fallback;\n\n// Lightweight Query API, PollServerState (protocol version 1). Request: magic 0xF6D5 (uint16), message type 0,\n// protocol version 1, a uint64 cookie, terminator 0x01. Response (type 1) echoes the cookie, then: server state\n// (uint8), changelist (uint32), flags (uint64), sub-state count (uint8) + 3 bytes per sub-state, name length\n// (uint16) + UTF-8 name, terminator. All little-endian. Returns false on no answer or a malformed one.\nstatic bool PollServerName(string host, int udpPort, out string serverName)\n{\n    serverName = null;\n    ulong cookie = BinaryPrimitives.ReadUInt64LittleEndian(RandomNumberGenerator.GetBytes(8));\n    var request = new byte[13];\n    BinaryPrimitives.WriteUInt16LittleEndian(request.AsSpan(0), 0xF6D5);\n    request[2] = 0;\n    request[3] = 1;\n    BinaryPrimitives.WriteUInt64LittleEndian(request.AsSpan(4), cookie);\n    request[12] = 1;\n\n    using var udp = new UdpClient(AddressFamily.InterNetwork);\n    udp.Client.ReceiveTimeout = 1500;\n    udp.Send(request, request.Length, host, udpPort);\n    var deadline = DateTime.UtcNow.AddMilliseconds(1500);\n    while (DateTime.UtcNow < deadline)\n    {\n        byte[] data;\n        try\n        {\n            var from = new IPEndPoint(IPAddress.Any, 0);\n            data = udp.Receive(ref from);\n        }\n        catch (SocketException)\n        {\n            return false;\n        }\n\n        // Skip anything that is not the answer to this request (a late reply to an earlier poll, a stray packet).\n        const int fixedPart = 2 + 1 + 1 + 8 + 1 + 4 + 8 + 1;\n        if (data.Length < fixedPart + 2 ||\n            BinaryPrimitives.ReadUInt16LittleEndian(data) != 0xF6D5 || data[2] != 1 ||\n            BinaryPrimitives.ReadUInt64LittleEndian(data.AsSpan(4)) != cookie)\n            continue;\n\n        int offset = fixedPart + data[fixedPart - 1] * 3;\n        if (data.Length < offset + 2)\n            return false;\n        int nameLength = BinaryPrimitives.ReadUInt16LittleEndian(data.AsSpan(offset));\n        offset += 2;\n        if (data.Length < offset + nameLength)\n            return false;\n        serverName = Encoding.UTF8.GetString(data, offset, nameLength).Trim();\n        return true;\n    }\n    return false;\n}\n\n// Roslyn script mode rejects a top-level `using var`, hence the try/finally.\nvar http = new HttpClient(new HttpClientHandler { ServerCertificateCustomValidationCallback = (m, c, ch, e) => true })\n{\n    Timeout = TimeSpan.FromSeconds(2.5)\n};\ntry\n{\n    // A failed health check throws, so the monitor reports the service offline.\n    var health = CallApi(http, url, \"HealthCheck\", new { clientCustomData = \"\" }, null, out int healthStatus);\n    if (healthStatus != 200)\n        throw new Exception($\"HealthCheck returned HTTP {healthStatus}\");\n\n    var rules = new Dictionary<string, string> { [\"Health\"] = Str(health.GetProperty(\"data\"), \"health\", \"unknown\") };\n\n    // An unclaimed server has no name yet, and a lost UDP reply must not rename the service, so either case\n    // keeps the last known name, or the panel's current one. A failed poll is retried after a minute.\n    var namePollInterval = TimeSpan.FromMinutes(5);\n    string cacheKey = $\"TCAdmin.Satisfactory.ServerName:{ThisService.ServiceId}:{address}:{port}\";\n    var cached = AppDomain.CurrentDomain.GetData(cacheKey) as Tuple<DateTime, string>;\n    string name = string.IsNullOrEmpty(cached?.Item2) ? ThisService.Name : cached.Item2;\n    if (cached == null || DateTime.UtcNow >= cached.Item1)\n    {\n        bool polled = PollServerName(address, port, out string serverName);\n        if (polled && !string.IsNullOrEmpty(serverName))\n            name = serverName;\n        var nextPoll = DateTime.UtcNow + (polled ? namePollInterval : TimeSpan.FromMinutes(1));\n        AppDomain.CurrentDomain.SetData(cacheKey, Tuple.Create(nextPoll, polled ? serverName : cached?.Item2));\n    }\n\n    int numPlayers = 0;\n    int maxPlayers = ThisService.Slots;\n\n    var login = CallApi(http, url, \"PasswordlessLogin\", new { MinimumPrivilegeLevel = \"Client\" }, null, out int loginStatus);\n    if (loginStatus == 200)\n    {\n        rules[\"Player Password\"] = \"No\";\n        string token = Str(login.GetProperty(\"data\"), \"authenticationToken\");\n        var state = CallApi(http, url, \"QueryServerState\", new { }, token, out int stateStatus);\n        if (stateStatus == 200)\n        {\n            var gs = state.GetProperty(\"data\").GetProperty(\"serverGameState\");\n            rules[\"Session\"] = Str(gs, \"activeSessionName\");\n            numPlayers = gs.GetProperty(\"numConnectedPlayers\").GetInt32();\n            maxPlayers = gs.GetProperty(\"playerLimit\").GetInt32();\n\n            // gamePhase looks like \"/Script/FactoryGame.FGGamePhase'GP_Project_Assembly_Phase_2'\"\n            string phase = Str(gs, \"gamePhase\", \"None\");\n            int phaseIndex = phase.LastIndexOf(\"Phase_\", StringComparison.Ordinal);\n            if (phaseIndex >= 0)\n                phase = \"Phase \" + phase.Substring(phaseIndex + 6).Trim('\\'', '\"');\n            rules[\"Phase\"] = phase;\n            rules[\"Tech Tier\"] = Str(gs, \"techTier\", \"0\");\n            rules[\"Running\"] = Str(gs, \"isGameRunning\", \"false\");\n            rules[\"Paused\"] = Str(gs, \"isGamePaused\", \"false\");\n            rules[\"Tick Rate\"] = Math.Round(gs.GetProperty(\"averageTickRate\").GetDouble(), 1)\n                .ToString(CultureInfo.InvariantCulture);\n        }\n    }\n    else if (Str(login, \"errorCode\") == \"passwordless_login_not_possible\")\n    {\n        rules[\"Player Password\"] = \"Yes\";\n    }\n\n    Globals.ReturnValue = new GameQueryResponse\n    {\n        Status = \"online\",\n        Hostname = $\"{address}:{port}\",\n        Name = name,\n        GameType = \"Satisfactory\",\n        Map = \"Satisfactory\",\n        NumPlayers = numPlayers,\n        MaxPlayers = maxPlayers,\n        Rules = rules,\n    };\n}\nfinally\n{\n    http.Dispose();\n}\n",
         "runImpersonated": false,
         "stopService": false,
         "ignoreErrors": true,
@@ -338,7 +199,7 @@
         "scriptRoles": [],
         "editor": [],
         "translations": [],
-        "identifier": "b5eff640-18bc-4968-aa50-5f3af24a513b"
+        "identifier": "8e3f6c1a-7d42-4b9e-b0a5-6c2e91f4d7b3"
       }
     }
   ],
@@ -348,11 +209,15 @@
   "createdDate": "2026-10-19T05:38:48.086255",
   "metadata": {},
   "backupConfig": {
-    "enabled": false,
+    "enabled": true,
     "backupType": "Full",
     "compressBackup": true,
     "stopServiceBeforeBackup": false,
-    "includedPaths": []
+    "includedPaths": [
+      "FactoryGame/Saved/SaveGames",
+      "FactoryGame/Saved/Config"
+    ],
+    "maxBackupCount": 5
   },
   "rolePermissions": [
     {
@@ -506,6 +371,20 @@
       "roleId": 3,
       "module": "BpFeature",
       "permission": "SteamUpdate",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Backups",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Backups",
       "moduleData": "",
       "granted": true
     }
