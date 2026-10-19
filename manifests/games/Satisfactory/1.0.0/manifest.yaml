@@ -1,0 +1,26 @@
+identifier: "Community.Games.Satisfactory"
+name: "Satisfactory"
+version: "1.0.0"
+author: "mox"
+shortDescription: "satisfactory"
+longDescription: |
+  # Satisfactory
+  
+  ## Description
+  
+  
+  ## Key Features
+  
+  ## What's new
+  
+  ## Instructions
+  
+icon: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/6dde86d0-2f9d-4205-9c2a-0b11be03d8c9/ddzf687-3997c582-843a-4e29-8e10-1b7e20e70224.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi82ZGRlODZkMC0yZjlkLTQyMDUtOWMyYS0wYjExYmUwM2Q4YzkvZGR6ZjY4Ny0zOTk3YzU4Mi04NDNhLTRlMjktOGUxMC0xYjdlMjBlNzAyMjQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Qv15zr5DMGABbzGAeQjwmpGXpeJl3-nwYyCAkxk0TTA"
+images:
+  - "https://external-preview.redd.it/satisfactory-wallpapers-v0-m5vAwRrcczHiQGHCNZZGWBqlYbhxQ9z3a-yIAdpcmDw.jpeg?auto=webp&s=b101b82b1d045f28390ef8159f68503f163bc960"
+tags:
+  - "Game"
+  - "Windows"
+files:
+  - path: "satisfactory - Windows.json"
+    type: "GameConfig"
