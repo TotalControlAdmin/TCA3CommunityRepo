@@ -1,0 +1,26 @@
+identifier: "Community.Games.DiscordBotNodeJS"
+name: "Discord Bot (NodeJS)"
+version: "1.0.0"
+author: "mox"
+shortDescription: "DiscordBot"
+longDescription: |
+  # Discord Bot (NodeJS)
+  
+  ## Description
+  
+  
+  ## Key Features
+  
+  ## What's new
+  
+  ## Instructions
+  
+icon: "https://i.redd.it/t9j9padwfdqb1.png"
+images:
+  - "https://img.magnific.com/free-vector/night-ocean-landscape-full-moon-stars-shine_107791-7397.jpg?semt=ais_hybrid&w=740&q=80"
+tags:
+  - "Game"
+  - "Windows"
+files:
+  - path: "DiscordBot - Windows.json"
+    type: "GameConfig"
