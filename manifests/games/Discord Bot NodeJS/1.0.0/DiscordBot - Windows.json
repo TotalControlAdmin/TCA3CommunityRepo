@@ -1,0 +1,246 @@
+{
+  "__TCA:ExportVersion": "3.22.68.0",
+  "__TCA:ExportedAt": "2026-11-07T04:34:04.1773865Z",
+  "name": "Discord Bot (NodeJS)",
+  "shortName": "DiscordBot",
+  "description": "",
+  "operatingSystem": "Windows",
+  "iconImage": "https://i.redd.it/t9j9padwfdqb1.png",
+  "backgroundImage": "https://img.magnific.com/free-vector/night-ocean-landscape-full-moon-stars-shine_107791-7397.jpg?semt=ais_hybrid\u0026w=740\u0026q=80",
+  "minSlots": 1,
+  "maxSlots": 1,
+  "defaultSlots": 1,
+  "startedUntilResponding": false,
+  "startingTimeout": "00:00:00",
+  "categoryId": 1,
+  "editableExtensions": [
+    ".txt",
+    ".cfg",
+    ".json",
+    ".xml"
+  ],
+  "logExtensions": [
+    ".log"
+  ],
+  "queryRconProtocolConfig": {
+    "queryProtocol": "",
+    "rconProtocol": "",
+    "privateRule": "",
+    "privateRuleValue": "",
+    "hiddenRules": [],
+    "eosClientId": "",
+    "eosClientSecret": "",
+    "eosDeploymentId": "",
+    "eosGrantType": ""
+  },
+  "consoleConfig": {
+    "enabled": true,
+    "outputSource": "MemoryWrapper",
+    "logFile": "",
+    "inputSource": "None",
+    "printRconResponse": false,
+    "outputFilters": "",
+    "stopCommand": "quit\nexit\nstop",
+    "waitAfterStopCommand": 1000,
+    "screenCaptureTitleBar": false,
+    "screenCaptureQuality": 25,
+    "screenCaptureFPS": 10,
+    "screenCaptureAllowMouse": false,
+    "screenCaptureAllowKeys": false,
+    "screenCaptureMouseHardware": true
+  },
+  "ipPortAllocationConfig": {
+    "usePrimaryIpOnly": false,
+    "useDefaultPortsOnly": false,
+    "supportsIpv6": false,
+    "uniquePort": "ServerIp",
+    "customPorts": [],
+    "portIncrement": 10
+  },
+  "fileAndDirectoryConfig": {
+    "relativeExecutable": "discordbot.bat",
+    "relativeWorkingDirectory": "",
+    "autoSetupFolderName": "discordbot",
+    "failOnMissingExecutable": false,
+    "externalDownloadEnable": true,
+    "externalDownloadUrl": ""
+  },
+  "steamConfig": {
+    "steamUpdate": false,
+    "appId": 0,
+    "runAsServiceUser": false,
+    "branch": "public",
+    "storeId": 0,
+    "steamUsername": "anonymous",
+    "steamDownloadRetries": 5,
+    "updateAfterCreateOrReinstall": false,
+    "verifyAll": false,
+    "steamTool": "DepotDownloader",
+    "steamPassword": ""
+  },
+  "gameCommandlineConfig": {
+    "privateCommandline": "testing 123 blah blah",
+    "privateCustomCommandline": "testing 123 blah blah"
+  },
+  "commandlineConfig": {
+    "enableSelection": true,
+    "defaultCommandline": "testing 123 blah blah",
+    "defaultCustomCommandline": "testing 123 blah blah",
+    "predefinedCommandlines": [
+      {
+        "id": 2,
+        "name": "New Command Line",
+        "commandLine": "testing 123 blah blah"
+      }
+    ]
+  },
+  "runAsConfig": {
+    "runAs": "LocalSystem",
+    "specificUsername": "",
+    "specificPassword": "",
+    "interactWithDesktop": true,
+    "elevated": false
+  },
+  "gameVariables": [],
+  "configFiles": [
+    {
+      "id": 40,
+      "relativePath": "discordbot.bat",
+      "description": "Launcher script for the Discord bot. Edit this if you need a specific Python path or want to run NodeJS instead.",
+      "template": "@echo off\ntitle TCAdmin v3 Discord Bot Runner\ncls\n\necho ===================================================\necho TCAdmin v3 Discord Bot Launcher\necho ===================================================\necho.\n\n:: Ensure we are operating in the script\u0027s actual directory\ncd /d \u0022%~dp0\u0022\n\n:: Step 1: Check if Node.js is installed\nwhere node \u003Enul 2\u003Enul\nif %errorlevel% neq 0 (\n    echo [ERROR] Node.js is not installed or not in your system PATH!\n    echo Please install Node.js from https://nodejs.org before running.\n    echo.\n    exit /b 1\n)\n\n:: Step 2: Check if node_modules exists, install if missing\nif not exist \u0022node_modules\\\u0022 (\n    echo [INFO] node_modules folder missing. Installing dependencies...\n    call npm install --no-audit --no-fund\n    if %errorlevel% neq 0 (\n        echo [ERROR] Failed to install dependencies via npm.\n        exit /b 1\n    )\n    echo [SUCCESS] Dependencies installed successfully.\n    echo.\n)\n\n:: Step 3: Run the JavaScript Bot Script\necho [STARTING] Launching bot.js...\necho.\nnode bot.js\n\n:: If the bot crashes, exit with an error code so TCAdmin logs the failure\nif %errorlevel% neq 0 (\n    echo.\n    echo [CRASH] The bot has stopped executing with error code %errorlevel%.\n    echo.\n    exit /b %errorlevel%\n)\n\nexit /b 0",
+      "order": 0,
+      "enableEditor": false,
+      "editor": []
+    }
+  ],
+  "fileSystemPermissions": [],
+  "gamesScripts": [],
+  "customModProviderConfigs": [],
+  "gamesCustomLinks": [],
+  "updates": [],
+  "createdDate": "2026-10-19T05:27:07.23054",
+  "metadata": {},
+  "backupConfig": {
+    "enabled": false,
+    "backupType": "Full",
+    "compressBackup": true,
+    "stopServiceBeforeBackup": false,
+    "includedPaths": []
+  },
+  "rolePermissions": [
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "FileManager",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "FileManager",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "FTP",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "FTP",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Logs",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Logs",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "ScheduledTasks",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "ScheduledTasks",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 2,
+      "module": "BpFeature",
+      "permission": "Console",
+      "moduleData": "",
+      "granted": true
+    },
+    {
+      "roleId": 3,
+      "module": "BpFeature",
+      "permission": "Console",
+      "moduleData": "",
+      "granted": true
+    }
+  ],
+  "mods": [],
+  "queryMonitoringConfig": {
+    "enabled": false,
+    "checkInterval": "00:05:00",
+    "startupGracePeriod": "00:10:00",
+    "retryDelay": "00:00:30",
+    "failureThreshold": 3,
+    "failureAction": "None",
+    "maxFailureAction": "None",
+    "logActivityOnFailure": true,
+    "autoRestartOnExit": true,
+    "autoRestartDelay": "00:00:05",
+    "autoRestartMaxAttempts": 3,
+    "autoRestartWindow": "00:05:00",
+    "logUnexpectedExit": true,
+    "slotDetectionEnabled": false,
+    "slotDetectionAction": "None",
+    "additionalAllowedSlots": 0,
+    "privateDetectionEnabled": false,
+    "privateDetectionAction": "None",
+    "brandDetectionEnabled": false,
+    "brandDetectionAction": "None",
+    "brandedText": "",
+    "brandedTextAtEnd": false,
+    "brandedTextAddSpace": false,
+    "brandRegex": "",
+    "brandRegexCaseInsensitive": false,
+    "rules": []
+  },
+  "fastDLConfig": {
+    "enabled": false,
+    "relativeRoot": "",
+    "urlExpression": "${FastDownloadBaseUrl}/",
+    "includePatterns": [],
+    "excludePatterns": [],
+    "syncOnServiceCreate": false,
+    "autoSyncOnFileChange": false,
+    "compression": "None",
+    "requiresHttps": false,
+    "stripPaths": [
+      "addons/"
+    ]
+  },
+  "environmentVariables": []
+}
