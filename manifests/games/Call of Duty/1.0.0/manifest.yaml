@@ -1,0 +1,26 @@
+identifier: "Community.Games.CallOfDuty"
+name: "Call of Duty"
+version: "1.0.0"
+author: "mox"
+shortDescription: "COD"
+longDescription: |
+  # Call of Duty
+  
+  ## Description
+  
+  
+  ## Key Features
+  
+  ## What's new
+  
+  ## Instructions
+  
+icon: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2620/header.jpg"
+images:
+  - "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2620/header.jpg"
+tags:
+  - "Game"
+  - "Windows"
+files:
+  - path: "COD - Windows.json"
+    type: "GameConfig"
