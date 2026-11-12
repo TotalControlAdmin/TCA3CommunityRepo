@@ -1,0 +1,26 @@
+identifier: "Community.Games.ProjectZomboid"
+name: "Project Zomboid"
+version: "1.0.0"
+author: "mox"
+shortDescription: "pz"
+longDescription: |
+  # Project Zomboid
+  
+  ## Description
+  
+  
+  ## Key Features
+  
+  ## What's new
+  
+  ## Instructions
+  
+icon: "https://cdn.cloudflare.steamstatic.com/steam/apps/108600/capsule_184x69.jpg"
+images:
+  - "https://cdn.cloudflare.steamstatic.com/steam/apps/108600/header.jpg"
+tags:
+  - "Game"
+  - "Linux"
+files:
+  - path: "pz - Linux.json"
+    type: "GameConfig"
